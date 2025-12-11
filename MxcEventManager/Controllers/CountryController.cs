@@ -34,7 +34,7 @@ public class CountryController : ControllerBase
         return Ok(items);
     }
 
-    [HttpGet]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<CountryDto>> Get(int id)
     {
         logger.LogInformation("Getting country.");
@@ -77,7 +77,7 @@ public class CountryController : ControllerBase
 
         logger.LogInformation("Created country.");
 
-        return CreatedAtAction(nameof(GetAll), new { id = countryModel.Id }, countryDto);
+        return CreatedAtAction(nameof(Get), new { id = countryModel.Id }, MapHelper.MapModelToDto(countryModel));
     }
 
     [HttpPut("{id:int}")]

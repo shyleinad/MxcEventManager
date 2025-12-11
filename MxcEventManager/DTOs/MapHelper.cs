@@ -1,7 +1,6 @@
-﻿using MxcEventManager.DTOs;
-using MxcEventManager.Models;
+﻿using MxcEventManager.Models;
 
-namespace MxcEventManager.Controllers;
+namespace MxcEventManager.DTOs;
 
 public static class MapHelper
 {
@@ -36,8 +35,8 @@ public static class MapHelper
             Id = eventModel.Id,
             Name = eventModel.Name,
             LocationId = eventModel.LocationId,
-            LocationName = eventModel.Location.Name,
-            CountryName = eventModel.Location.Country?.Name,
+            LocationName = eventModel.Location?.Name,
+            CountryName = eventModel.Location?.Country?.Name,
             Capacity = eventModel.Capacity
         };
 
@@ -48,7 +47,6 @@ public static class MapHelper
     {
         Country result = new Country
         {
-            Id = countryDto.Id,
             Name = countryDto.Name
         };
 
@@ -59,7 +57,6 @@ public static class MapHelper
     {
         Location result = new Location
         {
-            Id = locationDto.Id,
             Name = locationDto.Name,
             CountryId = locationDto.CountryId,
         };
@@ -71,7 +68,6 @@ public static class MapHelper
     {
         Event result = new Event
         {
-            Id = eventDto.Id,
             Name = eventDto.Name,
             LocationId = eventDto.LocationId,
             Capacity = eventDto.Capacity

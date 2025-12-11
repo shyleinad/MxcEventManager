@@ -80,9 +80,9 @@ public class EventController : ControllerBase
 
         eventDto.Id = eventModel.Id;
 
-        logger.LogInformation("Created country.");
+        logger.LogInformation("Created event.");
 
-        return CreatedAtAction(nameof(Get), new { id = eventDto.Id }, eventDto);
+        return CreatedAtAction(nameof(Get), new { id = eventDto.Id }, MapHelper.MapModelToDto(eventModel));
     }
 
     [HttpPut("{id:int}")]
@@ -112,7 +112,7 @@ public class EventController : ControllerBase
         {
             logger.LogError("Location not found!");
 
-            return BadRequest(new { error = "Event id does not exist." });
+            return BadRequest(new { error = "Location id does not exist." });
         }
 
         eventModel.Name = eventDto.Name;

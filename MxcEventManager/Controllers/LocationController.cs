@@ -94,7 +94,7 @@ public class LocationController : ControllerBase
 
         logger.LogInformation("Created location!");
 
-        return CreatedAtAction(nameof(Get), new { id = locationModel.Id }, locationDto);
+        return CreatedAtAction(nameof(Get), new { id = locationModel.Id }, MapHelper.MapModelToDto(locationModel));
     }
 
     [HttpPut("{id:int}")]
