@@ -110,9 +110,9 @@ public class EventController : ControllerBase
 
         if (locationModel == null)
         {
-            logger.LogError("Location not found!");
+            logger.LogError("Event not found!");
 
-            return BadRequest(new { error = "Location id does not exist." });
+            return BadRequest(new { error = "Event id does not exist." });
         }
 
         eventModel.Name = eventDto.Name;
