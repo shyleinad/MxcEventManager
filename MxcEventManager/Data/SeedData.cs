@@ -3,9 +3,9 @@ using MxcEventManager.Models;
 
 namespace MxcEventManager.Data;
 
-public class SeedData
+public static class SeedData
 {
-    public async Task SeedAsync(IServiceProvider services) 
+    public static async Task SeedAsync(IServiceProvider services) 
     {
         using var scope = services.CreateScope();
 
@@ -32,7 +32,7 @@ public class SeedData
 
             var iceland = await context.Countries.FirstAsync(c => c.Name == "Iceland");
 
-            var japan = context.Countries.FirstAsync(c => c.Name == "Japan");
+            var japan = await context.Countries.FirstAsync(c => c.Name == "Japan");
 
             context.Locations.AddRange(
                 new Location { Name = "Budapest", CountryId = hungary.Id },
@@ -46,11 +46,11 @@ public class SeedData
         // Seed events
         if (!await context.Events.AnyAsync())
         {
-            var budapest = context.Locations.FirstAsync(l => l.Name == "Budapest");
+            var budapest = await context.Locations.FirstAsync(l => l.Name == "Budapest");
 
-            var reykjavik = context.Locations.FirstAsync(l => l.Name == "Reykjavik");
+            var reykjavik = await context.Locations.FirstAsync(l => l.Name == "Reykjavik");
 
-            var tokyo = context.Locations.FirstAsync(l => l.Name == "Tokyo");
+            var tokyo = await context.Locations.FirstAsync(l => l.Name == "Tokyo");
 
             context.Events.AddRange(
                 new Event { Name = "Conference 2025", LocationId = budapest.Id, Capacity = 250 },
