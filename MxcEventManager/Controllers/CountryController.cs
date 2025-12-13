@@ -12,6 +12,7 @@ public class CountryController : ControllerBase
 {
     private readonly AppDbContext dbContext;
     private readonly ILogger<CountryController> logger;
+    private const string countryNotFoundMessage = "Country not found!";
 
     public CountryController(AppDbContext db, ILogger<CountryController> logger)
     {
@@ -29,7 +30,7 @@ public class CountryController : ControllerBase
             .Select(c => MapHelper.MapModelToDto(c))
             .ToListAsync();
 
-        logger.LogInformation("Got {0} countries.", items.Count);
+        logger.LogInformation("Got all countries.");
 
         return Ok(items);
     }
@@ -45,7 +46,7 @@ public class CountryController : ControllerBase
 
         if (countryModel == null)
         {
-            logger.LogWarning("Country not found!");
+            logger.LogWarning(countryNotFoundMessage);
 
             return NotFound();
         }
@@ -98,7 +99,7 @@ public class CountryController : ControllerBase
 
         if (countryModel == null)
         {
-            logger.LogError("Country not found!");
+            logger.LogError(countryNotFoundMessage);
 
             return NotFound();
         }
@@ -124,12 +125,12 @@ public class CountryController : ControllerBase
 
         if (countryModel == null)
         {
-            logger.LogError("Country not found!");
+            logger.LogError(countryNotFoundMessage);
 
             return NotFound();
         }
 
-        if (countryModel.Locations.Any())
+        if (countryModel.Locations.Count == 0)
         {
             logger.LogError("Cannot delete country that has locations. Remove or reassign locations first.");
 

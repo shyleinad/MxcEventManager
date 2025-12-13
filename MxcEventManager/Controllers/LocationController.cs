@@ -12,6 +12,7 @@ public class LocationController : ControllerBase
 {
     private readonly AppDbContext dbContext;
     private readonly ILogger<LocationController> logger;
+    private const string locationNotFoundMessage = "Location not found!";
 
     public LocationController(AppDbContext db, ILogger<LocationController> logger)
     {
@@ -30,7 +31,7 @@ public class LocationController : ControllerBase
             .Select(l => MapHelper.MapModelToDto(l))
             .ToListAsync();
 
-        logger.LogInformation("Got {0} locations.", items.Count);
+        logger.LogInformation("Got all locations.");
 
         return Ok(items);
     }
@@ -47,7 +48,7 @@ public class LocationController : ControllerBase
 
         if (locationModel == null)
         {
-            logger.LogWarning("Location not found!");
+            logger.LogWarning(locationNotFoundMessage);
 
             return NotFound();
         }
@@ -115,7 +116,7 @@ public class LocationController : ControllerBase
 
         if (locationModel == null)
         {
-            logger.LogError("Location not found!");
+            logger.LogError(locationNotFoundMessage);
 
             return NotFound();
         }
@@ -154,12 +155,12 @@ public class LocationController : ControllerBase
 
         if (locationModel == null)
         {
-            logger.LogError("Location not found!");
+            logger.LogError(locationNotFoundMessage);
 
             return NotFound();
         }
 
-        if (locationModel.Events.Any())
+        if (locationModel.Events.Count == 0)
         {
             logger.LogError("Cannot delete location with events. Remove events first.");
 

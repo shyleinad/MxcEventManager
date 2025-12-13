@@ -11,8 +11,8 @@ namespace MxcEventManager.Controllers;
 public class EventController : ControllerBase
 {
     private readonly AppDbContext dbContext;
-
     private readonly ILogger<EventController> logger;
+    private const string eventNotFoundMessage = "Event not found!";
 
     public EventController(AppDbContext dbContext, ILogger<EventController> logger)
     {
@@ -31,7 +31,7 @@ public class EventController : ControllerBase
             .Select(e => MapHelper.MapModelToDto(e))
             .ToListAsync();
 
-        logger.LogInformation("Got {0} events.", result.Count);
+        logger.LogInformation("Got all events.");
 
         return result;
     }
@@ -48,7 +48,7 @@ public class EventController : ControllerBase
 
         if (eventModel is null) 
         {
-            logger.LogWarning("Event not found!");
+            logger.LogWarning(eventNotFoundMessage);
 
             return NotFound();
         }
@@ -101,7 +101,7 @@ public class EventController : ControllerBase
 
         if (eventModel == null)
         {
-            logger.LogError("Event not found!");
+            logger.LogError(eventNotFoundMessage);
 
             return NotFound();
         }
@@ -110,9 +110,9 @@ public class EventController : ControllerBase
 
         if (locationModel == null)
         {
-            logger.LogError("Event not found!");
+            logger.LogError("Location not found.");
 
-            return BadRequest(new { error = "Event id does not exist." });
+            return BadRequest(new { error = "Location id does not exist." });
         }
 
         eventModel.Name = eventDto.Name;
@@ -135,7 +135,7 @@ public class EventController : ControllerBase
 
         if (eventModel == null)
         {
-            logger.LogError("Event not found!");
+            logger.LogError(eventNotFoundMessage);
 
             return NotFound();
         }
