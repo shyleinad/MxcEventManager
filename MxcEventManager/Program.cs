@@ -1,5 +1,6 @@
-using MxcEventManager.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MxcEventManager.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,19 +12,20 @@ var configuration = builder.Configuration;
 
 // Add db contexts
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseSqlServer(
+        configuration.GetConnectionString("DefaultConnection")
     ));
 
 builder.Services.AddDbContext<AppIdentityDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultIdentityConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultIdentityConnection"))
+    options.UseSqlServer(
+        configuration.GetConnectionString("DefaultIdentityConnection")
     ));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
 
 var app = builder.Build();
 
@@ -40,7 +42,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(x =>
+    {
+        x.SwaggerEndpoint("/swagger/v1/swagger.json", "MxcEventManager API");
+        x.RoutePrefix = string.Empty;
+    });
 }
 
 app.MapControllers();
